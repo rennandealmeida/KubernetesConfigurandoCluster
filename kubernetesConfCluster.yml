@@ -1,0 +1,50 @@
+---
+# FONTES: 
+#        https://www.linuxtips.com.br/blog/descomplicando-o-kubernetes-02
+#        https://kubernetes.io/docs/setup/independent/install-kubeadm/
+
+#Antes de aplicar os passos a seguir eh importante ressaltar que todas as maquinas do cluster devem ter o Docker instalado.
+#Obs: Tutorial para Debian e familia.  
+ 
+ - passo 1:
+     #Intalando o Kubernetes | aplicar os comandos em modo root
+     comando: apt-get update && apt-get install -y apt-transport-https
+     comando: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+     comando: echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+     comando: apt-get update
+     comando: apt-get install -y kubelet kubeadm kubectl
+
+ - passo 2:
+     #Antes de iniciar o cluster eh necessario desabilitar a swap
+     comando: swapoff -a
+     # comente a linha no arquivo fstab que possuir a informacao de montar a swap
+     comando: vim /etc/fstab
+
+ - passo 3:
+     # Agora vamos iniciar nosso Cluster
+     # no comando abaixo substitua o ip do exemplo pelo ip do seu nodeMaster e ip de rede que se encontra o seu nodeMaster. 
+     comando: kubeadm init --apiserver-advertise-address=172.16.11.46 --pod-network-cidr=172.16.11.0/24
+     #Apos o comando acima a saida do comando indicara os passos a seguir | copie o token gerado para colar nas maquinas slave do cluster posteriormente.
+     comando: mkdir -p $HOME/.kube
+     comando: sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+     comando: sudo chown $(id -u):$(id -g) $HOME/.kube/config
+     #copie o token nas maquinas slaves 
+     # depois de copiar o token utilize o comando abaixo para verificar se as maquinas se juntaram ao Cluster.
+     comando: kubectl get nodes
+     #obs. perceba que as maquinas slaves serao listadas na saida do comando acima e que o status estara NOT READY
+
+ - passo 4:
+     #configurando o cluster com weave-net 
+     # O comando abaixo serve para o download da versao v1.10 da imagem weaveworks, responsavel por configurar o cluster.
+     comando: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=v1.10)"
+
+ - passo 5:
+     # Verificando se o procedimento ocorreu como esperado
+     comando: kubectl get nodes
+     # Observe que agora na saida desse comando o Status estara Ready
+
+ - passo 6:
+     # Criando replicas do nginx em nosso cluster 
+     comando: kubectl run nginx --image nginx --replicas 4
+     # Verificando se o passo anterior foi efetuado com sucesso
+     comando: kubectl get pods -o wide
