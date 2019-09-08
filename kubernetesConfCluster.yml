@@ -31,7 +31,9 @@
      #copie o token nas maquinas slaves 
      # depois de copiar o token utilize o comando abaixo para verificar se as maquinas se juntaram ao Cluster.
      comando: kubectl get nodes
-     #CASO OCORRA UM ERRO RELACIONADO A CERTIFICADO UTILIZE ESE COMANDO PARA CORRIGIR: "  export KUBECONFIG=/etc/kubernetes/kubelet.conf "
+     #CASO OCORRA UM ERRO RELACIONADO A CERTIFICADO UTILIZE ESE COMANDO PARA CORRIGIR: 
+     #"  export KUBECONFIG=/etc/kubernetes/kubelet.conf ", feito isso repita:
+     #kubectl get nodes  (se o comando funcionar printara uma tabela)
      #obs. perceba que as maquinas slaves serao listadas na saida do comando acima e que o status estara NOT READY
 
  - passo 4:
