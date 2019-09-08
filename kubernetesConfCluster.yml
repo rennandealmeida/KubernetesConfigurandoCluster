@@ -31,6 +31,7 @@
      #copie o token nas maquinas slaves 
      # depois de copiar o token utilize o comando abaixo para verificar se as maquinas se juntaram ao Cluster.
      comando: kubectl get nodes
+     #CASO OCORRA UM ERRO RELACIONADO A CERTIFICADO UTILIZE ESE COMANDO PARA CORRIGIR: "  export KUBECONFIG=/etc/kubernetes/kubelet.conf "
      #obs. perceba que as maquinas slaves serao listadas na saida do comando acima e que o status estara NOT READY
 
  - passo 4:
@@ -38,7 +39,7 @@
      # O comando abaixo serve para o download da versao v1.10 da imagem weaveworks, responsavel por configurar o cluster.
      comando: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=v1.10)"
 
- - passo 5:
+--discovery-token-ca-cert-hash sha256:28250cf95914072d5bda1ed543b41a2fa39824eca503b39002dacc7c4383f60a - passo 5:
      # Verificando se o procedimento ocorreu como esperado
      comando: kubectl get nodes
      # Observe que agora na saida desse comando o Status estara Ready
